@@ -2,3 +2,6 @@
 name = ".config"
 linux = "~"
 
+[[links]]
+name = "nvim"
+windows = "~/AppData/Local"
