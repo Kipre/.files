@@ -5,3 +5,7 @@ linux = "~"
 [[links]]
 name = "nvim"
 windows = "~/AppData/Local"
+
+[[links]]
+name = ".gitconfig"
+windows = "~"

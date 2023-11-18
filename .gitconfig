@@ -1,0 +1,51 @@
+[user]
+	name = Cyprien
+	email = cyprien.neverov@d3s-consulting.com
+[http "https://d3s-server.d3s:30000"]
+  sslCAInfo = C:/tmp/d3s-server.d3s.crt
+  sslCAPath = C:/tmp/
+[http]
+	sslBackend = schannel
+[credential "https://gitlabee.dt.renault.com"]
+	provider = generic
+[credential "https://gitlab.d3s-server.d3s"]
+	provider = generic
+[renaultRepos]
+  repo = C:/Users/cneverov/projects/renault/back
+  repo = C:/Users/cneverov/projects/renault/back/alliancecore
+  repo = C:/Users/cneverov/projects/renault/front
+[alias]
+  renault = for-each-repo --config=renaultRepos.repo
+	dog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr, %C(#ff0ab3 dim)%ar%Creset) %C(bold blue)<%an, %C(#ff0ab3 dim)%cn%Creset>%Creset' --abbrev-commit --exclude=refs/remotes/origin/NACT* --exclude=refs/remotes/origin/some-pattern*"
+	ls = ls-files
+[core]
+  pager = delta
+	# autocrlf = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[merge]
+	tool = nvimdiff
+  # conflictstylg = diff3
+[mergetool]
+  keepBackup = false
+
+[safg]
+	directory = %(prefix)///nas/Partage/Cyprien/differ
+[mergetool]
+	keepBackup = false
+
+[interactive]
+  # diffFilter = delta --color-only
+
+[delta]
+  navigate = true    # use n and N to move between diff sections
+  light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+  side-by-side = true
+  theme = Monokai Extended Origin
+[diff]
+  colorMoved = default
+  submodule = log
