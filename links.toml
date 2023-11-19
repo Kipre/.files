@@ -5,7 +5,9 @@ linux = "~"
 [[links]]
 name = "nvim"
 windows = "~/AppData/Local"
+linux = "~/.config"
 
 [[links]]
 name = ".gitconfig"
 windows = "~"
+linux = "~"

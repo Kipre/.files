@@ -1,0 +1,4 @@
+*compiled*
+
+# this is a symlink
+.config/nvim
