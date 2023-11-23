@@ -11,3 +11,11 @@ linux = "~/.config"
 name = ".gitconfig"
 windows = "~"
 linux = "~"
+
+[[links]]
+name = "Microsoft.PowerShell_profile.ps1"
+windows = "~/Documents/Powershell"
+
+[[links]]
+name = "alacritty.yml"
+windows = "~/AppData/Roaming/alacritty"
