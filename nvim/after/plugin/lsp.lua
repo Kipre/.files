@@ -1,5 +1,7 @@
 local lsp_zero = require('lsp-zero')
-vim.lsp.set_log_level("debug")
+
+vim.lsp.set_log_level("warn")
+
 lsp_zero.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
 

@@ -19,4 +19,3 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
-vim.lsp.set_log_level("off")
