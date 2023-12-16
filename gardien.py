@@ -75,7 +75,9 @@ def create_symlinks(dry_run=False, force=False, **kwargs):
             if dry_run:
                 print(f"{destination} seems to be free")
             else:
-                os.makedirs(os.path.dirname(destination))
+                destination_folder = os.path.dirname(destination)
+                if not os.path.exists(destination_folder):
+                    os.makedirs(destination_folder)
                 os.symlink(source, destination)
                 print(f"{destination} wrote symlink in empty place")
 
