@@ -17,5 +17,9 @@ name = "Microsoft.PowerShell_profile.ps1"
 windows = "~/Documents/Powershell"
 
 [[links]]
-name = "alacritty.yml"
+name = "alacritty.toml"
 windows = "~/AppData/Roaming/alacritty"
+
+[[links]]
+name = "kipr.omp.json"
+windows = "~/.oh-my-posh"
