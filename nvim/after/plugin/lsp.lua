@@ -15,11 +15,12 @@ lsp_zero.on_attach(function(client, bufnr)
   -- vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end, opts)
   vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'rust_analyzer', 'pylsp', 'clangd'},
+  ensure_installed = {'tsserver', 'rust_analyzer', 'ruff_lsp', 'clangd'},
   handlers = {
     lsp_zero.default_setup,
     lua_ls = function()
