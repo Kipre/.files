@@ -1,5 +1,6 @@
 local builtin = require('telescope.builtin')
 
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
 vim.keymap.set('n', '<leader>pp', builtin.planets, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
@@ -13,8 +14,6 @@ end)
 -- vim.keymap.set('n', '<leader>pd', builtin.lsp_definitions, {noremap=true, silent=true})
 vim.keymap.set('n', '<leader>gv', function() builtin.lsp_definitions({jump_type="vsplit"}) end, {noremap=true, silent=true})
 
-
-
 local telescope = require("telescope")
 -- load refactoring Telescope extension
 telescope.load_extension("refactoring")
@@ -25,4 +24,14 @@ vim.keymap.set(
 	function() telescope.extensions.refactoring.refactors() end
 )
 
-
+telescope.setup {
+  pickers = {
+    buffers = {
+      mappings = {
+        n = {
+          ["<c-d>"] = "delete_buffer",
+        }
+      }
+    }
+  }
+}
