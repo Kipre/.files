@@ -21,8 +21,6 @@ const LinkConfig = struct {
 const Config = struct {
     links: []const LinkConfig,
 };
-// Crash report needs to override the panic handler
-// pub const panic = crash_report.panic;
 
 pub fn fatal(comptime format: []const u8, args: anytype) noreturn {
     std.log.err(format, args);
@@ -98,12 +96,17 @@ fn readConfig(alloc: Allocator) !std.json.Parsed(Config) {
 var symlink_buffer: [fs.MAX_PATH_BYTES]u8 = undefined;
 
 fn handleSingleLink(alloc: Allocator, home_dir: []const u8, source_dir: []const u8, link: LinkConfig, dry_run: bool) !void {
-    if (link.windows == null) return;
+    const location_field = comptime if (native_os == .windows) "windows" else "linux";
+
+    const maybe_location = @field(link, location_field);
+    if (maybe_location == null) return;
+
+    const location = maybe_location.?;
 
     const out_file = std.io.getStdOut();
     const cwd = std.fs.cwd();
 
-    const destination = try fs.path.resolve(alloc, &[_][]const u8{ home_dir, link.windows.?, link.name });
+    const destination = try fs.path.resolve(alloc, &[_][]const u8{ home_dir, location, link.name });
     defer alloc.free(destination);
     const relative_source = try fs.path.resolve(alloc, &[_][]const u8{ source_dir, link.name });
     defer alloc.free(relative_source);
@@ -127,7 +130,7 @@ fn handleSingleLink(alloc: Allocator, home_dir: []const u8, source_dir: []const 
                 try out_file.writer().print("Symlink created for {s}\n", .{link.name});
             }
             return;
-        } else if (err == error.Unexpected) {
+        } else if (err == error.Unexpected or err == error.NotLink) {
             try out_file.writer().print("Found some issue while reading {s}\n", .{destination});
         }
         return err;
@@ -152,12 +155,7 @@ fn cmdSetup(alloc: Allocator, args: []const []const u8) !void {
                 } else if (mem.eql(u8, arg, "--dry-run")) {
                     dry_run = true;
                     continue;
-                } else
-                //     if (mem.eql(u8, arg, "--force")) {
-                //     force = true;
-                //     continue;
-                // } else
-                {
+                } else {
                     fatal("unrecognized parameter: '{s}'", .{arg});
                 }
             } else {
@@ -166,10 +164,8 @@ fn cmdSetup(alloc: Allocator, args: []const []const u8) !void {
         }
     }
 
-    // if (dry_run and force)
-    //     fatal("can't run --force and --dry-run at the same time", .{});
-
-    const home_dir: []const u8 = std.process.getEnvVarOwned(alloc, "userprofile") catch {
+    const home_dir_env_var_name = if (native_os == .windows) "userprofile" else "HOME";
+    const home_dir: []const u8 = std.process.getEnvVarOwned(alloc, home_dir_env_var_name) catch {
         fatal("Could not find the home directory", .{});
     };
 
@@ -194,7 +190,8 @@ test "does what needs to be done" {
     defer tmp_dir.cleanup();
     try tmp_dir.dir.writeFile("source.txt", "hello");
     const alloc = std.testing.allocator;
-    const path = try tmp_dir.dir.realpathAlloc(alloc, "");
+    const path = try tmp_dir.dir.realpathAlloc(alloc, ".");
+
     defer alloc.free(path);
 
     handleSingleLink(alloc, path, path, .{ .name = "config" }, true) catch |err| {
@@ -207,14 +204,14 @@ test "does what needs to be done" {
         try expect((try iter.next()) == null);
     }
 
-    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok" }, true);
+    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok", .linux = "ok" }, true);
     {
         var iter = tmp_dir.dir.iterate();
         try testing.expectEqualStrings("source.txt", if (try iter.next()) |v| v.name else "");
         try expect((try iter.next()) == null);
     }
 
-    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok" }, false);
+    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok", .linux = "ok" }, false);
     {
         var iter = tmp_dir.dir.iterate();
         try testing.expectEqualStrings("ok", if (try iter.next()) |v| v.name else "");
@@ -237,14 +234,14 @@ test "file already exists" {
     try tmp_dir.dir.writeFile("destination.txt", "heyy");
 
     const alloc = std.testing.allocator;
-    const path = try tmp_dir.dir.realpathAlloc(alloc, "");
+    const path = try tmp_dir.dir.realpathAlloc(alloc, ".");
     defer alloc.free(path);
 
-    if (handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "" }, true)) |_| {
+    if (handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "", .linux = "" }, true)) |_| {
         // this was supposed to crash
         try expect(false);
     } else |err| {
-        try expect(err == error.Unexpected);
+        try expect(err == error.Unexpected or err == error.NotLink);
     }
 
     {
@@ -265,11 +262,11 @@ test "symlink already exists" {
 
     try tmp_dir.dir.writeFile("source.txt", "hello");
     const alloc = std.testing.allocator;
-    const path = try tmp_dir.dir.realpathAlloc(alloc, "");
+    const path = try tmp_dir.dir.realpathAlloc(alloc, ".");
     defer alloc.free(path);
 
-    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok" }, false);
-    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok" }, false);
+    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok", .linux = "ok" }, false);
+    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok", .linux = "ok" }, false);
     {
         var iter = tmp_dir.dir.iterate();
         try testing.expectEqualStrings("ok", if (try iter.next()) |v| v.name else "");
@@ -284,17 +281,17 @@ test "deep destination" {
 
     try tmp_dir.dir.writeFile("source.txt", "hello");
     const alloc = std.testing.allocator;
-    const path = try tmp_dir.dir.realpathAlloc(alloc, "");
+    const path = try tmp_dir.dir.realpathAlloc(alloc, ".");
     defer alloc.free(path);
 
-    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok/this/path" }, true);
+    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok/this/path", .linux = "ok/this/path" }, true);
     {
         var iter = tmp_dir.dir.iterate();
         try testing.expectEqualStrings("source.txt", if (try iter.next()) |v| v.name else "");
         try expect((try iter.next()) == null);
     }
 
-    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok/this/path" }, false);
+    try handleSingleLink(alloc, path, path, .{ .name = "source.txt", .windows = "ok/this/path", .linux = "ok/this/path" }, false);
     {
         var iter = tmp_dir.dir.iterate();
         try testing.expectEqualStrings("ok", if (try iter.next()) |v| v.name else "");
