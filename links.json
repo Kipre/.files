@@ -1,0 +1,30 @@
+{
+  "links": [
+    {
+      "name": ".config",
+      "linux": ""
+    },
+    {
+      "name": "nvim",
+      "windows": "AppData/Local",
+      "linux": ".config"
+    },
+    {
+      "name": ".gitconfig",
+      "# windows": "",
+      "linux": ""
+    },
+    {
+      "name": "Microsoft.PowerShell_profile.ps1",
+      "windows": "Documents/Powershell"
+    },
+    {
+      "name": "alacritty.toml",
+      "windows": "AppData/Roaming/alacritty"
+    },
+    {
+      "name": "kipr.omp.json",
+      "windows": ".oh-my-posh"
+    }
+  ]
+}
