@@ -21,7 +21,6 @@ return require('packer').startup(function(use)
   }
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
   use('mbbill/undotree')
-  use('tpope/vim-fugitive')
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',
@@ -46,13 +45,6 @@ return require('packer').startup(function(use)
         auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
       }
     end
-  }
-  use {
-    "ThePrimeagen/refactoring.nvim",
-    requires = {
-      { "nvim-lua/plenary.nvim" },
-      { "nvim-treesitter/nvim-treesitter" }
-    }
   }
   use { 'nvimtools/none-ls.nvim' }
   use { 'airblade/vim-gitgutter' }
