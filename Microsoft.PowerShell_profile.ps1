@@ -19,7 +19,7 @@ if ($host.Name -eq 'ConsoleHost')
     Set-PSReadLineOption -PredictionSource HistoryAndPlugin
     # Set-PSReadLineOption -PredictionViewStyle ListView
 
-    oh-my-posh --init --shell pwsh --config C:\Users\cneverov\.oh-my-posh\kipr.omp.json | Invoke-Expression
+    oh-my-posh --init --shell pwsh --config ~\.files\kipr.omp.json | Invoke-Expression
 }
 
 $env:EDITOR = "nvim"

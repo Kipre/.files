@@ -4,3 +4,11 @@ size = 12.0
 
 [window]
 startup_mode = "Maximized"
+
+[terminal.shell]
+program = "pwsh"
+# args = ["-l"]
+
+# to start in home directory:  C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Alacritty
+# modify "Start in:" field to "%USERPROFILE%"
+
