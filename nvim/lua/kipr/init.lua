@@ -5,7 +5,7 @@ vim.cmd [[
   au TextYankPost * silent! lua vim.highlight.on_yank {}
 ]]
 
-vim.lsp.enable({'ts_ls'})
+vim.lsp.enable({'ts_ls', 'biome', 'zls'})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
@@ -16,5 +16,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.cmd("set completeopt+=noselect");
 vim.diagnostic.config({ virtual_text = true })

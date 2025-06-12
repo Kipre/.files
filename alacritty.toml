@@ -12,3 +12,7 @@ program = "pwsh"
 # to start in home directory:  C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Alacritty
 # modify "Start in:" field to "%USERPROFILE%"
 
+[keyboard]
+bindings = [
+  { key = "N", mods = "Control|Shift", action = "CreateNewWindow" }
+]
