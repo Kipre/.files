@@ -5,7 +5,7 @@ vim.cmd [[
   au TextYankPost * silent! lua vim.highlight.on_yank {}
 ]]
 
-vim.lsp.enable({'ts_ls', 'biome', 'zls'})
+vim.lsp.enable({'ts_ls', 'biome', 'zls', 'clangd'})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
