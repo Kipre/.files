@@ -5,6 +5,14 @@ vim.cmd [[
   au TextYankPost * silent! lua vim.highlight.on_yank {}
 ]]
 
+vim.pack.add({
+  'https://github.com/nvim-telescope/telescope.nvim',
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/nvim-treesitter/nvim-treesitter',
+  'https://github.com/airblade/vim-gitgutter',
+  'https://github.com/neovim/nvim-lspconfig',
+})
+
 
 vim.lsp.enable({'ts_ls', 'biome', 'zls', 'clangd'})
 
