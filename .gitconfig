@@ -6,16 +6,20 @@
 	dog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr, %C(#ff0ab3 dim)%ar%Creset) %C(bold blue)<%an, %C(#ff0ab3 dim)%cn%Creset>%Creset' --abbrev-commit --exclude=refs/remotes/origin/NACT* --exclude=refs/remotes/origin/some-pattern*"
 	ls = ls-files
 
-[merge]
-	tool = nvimdiff
-  # conflictstylg = diff3
+[difftool "nvim_difftool"]
+  cmd = nvim -c \"packadd nvim.difftool\" -d \"$LOCAL\" \"$REMOTE\"
 
-[mergetool]
+[mergetool "fugitive"]
+  cmd = nvim -f -c "Gvdiffsplit!" "$MERGED"
+
+[merge]
+	tool = fugitive
   keepBackup = false
 
 [diff]
   colorMoved = default
   submodule = log
+  tool = nvim_difftool
 
 [credential]
 	helper = store

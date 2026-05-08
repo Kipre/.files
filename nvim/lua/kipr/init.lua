@@ -11,6 +11,7 @@ vim.pack.add({
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/airblade/vim-gitgutter',
   'https://github.com/neovim/nvim-lspconfig',
+  'https://github.com/tpope/vim-fugitive',
 })
 
 
@@ -21,6 +22,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if client:supports_method('textDocument/completion') then
       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+
+    if client:supports_method(vim.lsp.protocol.Methods.textDocument_defintition, bufnr) then
+      vim.keymap.set(
+        'n',
+        'gd',
+        vim.lsp.buf.definition,
+        { desc = 'LSP: go to definition', buffer = bufnr }
+      )
     end
   end,
 })

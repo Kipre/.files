@@ -11,3 +11,4 @@ vim.keymap.set("n", "<A-k>", ":m -2<CR>")
 vim.keymap.set("n", "<A-l>", "xp")
 vim.keymap.set("n", "<A-h>", "xhhp")
 
+vim.keymap.set("t", "<C-q>q", "<C-\\><C-n>")
