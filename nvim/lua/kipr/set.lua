@@ -22,3 +22,6 @@ vim.opt.smartindent = true
 vim.opt.wrap = false
 vim.opt.completeopt = { "noselect", "menuone" }
 
+if jit.os == "Linux" then
+  vim.opt.makeprg = "just"
+end

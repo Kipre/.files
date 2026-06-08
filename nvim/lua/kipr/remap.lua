@@ -11,4 +11,7 @@ vim.keymap.set("n", "<A-k>", ":m -2<CR>")
 vim.keymap.set("n", "<A-l>", "xp")
 vim.keymap.set("n", "<A-h>", "xhhp")
 
-vim.keymap.set("t", "<C-q>q", "<C-\\><C-n>")
+vim.keymap.set("t", "²", "<C-\\><C-n>")
+vim.keymap.set("n", "²", "<esc>")
+vim.keymap.set("v", "²", "<esc>")
+vim.keymap.set("i", "²", "<esc>")
