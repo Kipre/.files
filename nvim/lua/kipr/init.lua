@@ -14,6 +14,15 @@ vim.pack.add({
   'https://github.com/tpope/vim-fugitive',
 })
 
+-- vim-gitgutter bug that causes an error to pop when browsing directoris with
+-- the new native vim.dir
+vim.api.nvim_create_autocmd({'BufEnter', 'FileType'}, {
+  callback = function()
+    if vim.bo.buftype ~= '' or vim.bo.filetype == 'directory' then
+      pcall(vim.cmd, 'GitGutterBufferDisable')
+    end
+  end,
+})
 
 vim.lsp.enable({'ts_ls', 'biome', 'zls', 'clangd'})
 

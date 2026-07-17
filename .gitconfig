@@ -25,4 +25,8 @@
 	helper = store
 
 [core]
-	editor = nvim
+  editor = nvim
+  excludesFile = ~/.gitignore_global
+
+[mergetool]
+	keepBackup = false

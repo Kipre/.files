@@ -15,6 +15,10 @@
       "linux": ""
     },
     {
+      "name": ".gitignore_global",
+      "linux": ""
+    },
+    {
       "name": "Microsoft.PowerShell_profile.ps1",
       "windows": "Documents/Powershell"
     },

@@ -22,6 +22,10 @@ vim.opt.smartindent = true
 vim.opt.wrap = false
 vim.opt.completeopt = { "noselect", "menuone" }
 
+-- enable project specific vimrc files
+vim.opt.exrc = true
+
 if jit.os == "Linux" then
   vim.opt.makeprg = "just"
+  vim.opt.errorformat = "%m"
 end
