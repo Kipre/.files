@@ -74,7 +74,7 @@ fn mainArgs(alloc: Allocator, args: []const []const u8) !void {
 const usage_setup =
     \\Usage: zig setup [options]
     \\
-    \\   Stupid script for creating creating symlinks for dotfiles
+    \\   Script for creating creating symlinks for dotfiles
     \\
     \\Options:
     \\  --dry-run                     Don't do anything, just run checks and print results

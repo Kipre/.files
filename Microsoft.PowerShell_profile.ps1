@@ -14,8 +14,6 @@ if ($host.Name -eq 'ConsoleHost')
 {
     Import-Module -Name CompletionPredictor
     Import-Module PSReadLine
-    Set-PSReadLineOption -EditMode Vi
-    Set-PSReadLineOption -ViModeIndicator Script -ViModeChangeHandler $OnViModeChange
     Set-PSReadLineOption -PredictionSource HistoryAndPlugin
     # Set-PSReadLineOption -PredictionViewStyle ListView
 
@@ -24,9 +22,3 @@ if ($host.Name -eq 'ConsoleHost')
 
 $env:EDITOR = "nvim"
 $env:VISUAL = "nvim"
-
-function delete-all-branches { git branch -D $(git branch).Trim() }
-
-function who-uses ($port) {
-	Get-NetTCPConnection | where Localport -eq $port | select Localport,OwningProcess
-}
