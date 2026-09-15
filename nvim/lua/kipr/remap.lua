@@ -15,7 +15,4 @@ vim.keymap.set("t", "²", "<C-\\><C-n>")
 vim.keymap.set("n", "²", "<esc>")
 vim.keymap.set("v", "²", "<esc>")
 vim.keymap.set("i", "²", "<esc>")
-
-vim.api.nvim_create_user_command('Ex', function()
-  vim.cmd('e ' .. vim.fn.expand('%:p:h'))
-end, { force = true })
+vim.keymap.set("c", "²", "<C-c>")
