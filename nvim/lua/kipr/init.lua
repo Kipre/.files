@@ -6,14 +6,14 @@ vim.cmd [[
 ]]
 
 vim.pack.add({
-  'https://github.com/nvim-telescope/telescope.nvim',
   'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/nvim-telescope/telescope.nvim',
+  'https://github.com/nvim-telescope/telescope-live-grep-args.nvim',
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/lewis6991/gitsigns.nvim',
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/tpope/vim-fugitive',
   'https://github.com/hat0uma/csvview.nvim.git',
-  'https://github.com/samjwill/nvim-unception',
 })
 
 vim.lsp.enable({
@@ -129,4 +129,23 @@ vim.keymap.set("n", "<leader>yl", function()
   vim.fn.setreg("+", location)
   vim.notify("Copied: " .. location)
 end, { desc = "Copy file path and line" })
+
+vim.keymap.set({ "x", "s" }, "<leader>yl", function()
+  local start_line = vim.fn.line("v")
+  local end_line = vim.fn.line(".")
+
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+
+  local location = string.format(
+    "%s:%d-%d",
+    vim.fn.expand("%:."),
+    start_line,
+    end_line
+  )
+
+  vim.fn.setreg("+", location)
+  vim.notify("Copied: " .. location)
+end, { desc = "Copy file path and selected lines" })
 
